@@ -1,84 +1,146 @@
-# Power City Simulation
+Power City Simulation Documentation
 
-This project simulates a power city with renewable energy sources, battery storage, and grid connection. It demonstrates the process of building an application, from algorithm design to code implementation and debugging, while exploring different programming paradigms.
+Student ID: [Insert Your Student ID Here]
 
-## Project Description
+Project Overview
 
-This Python program simulates a power city with:
+The Power City Simulation is an energy modeling tool designed to demonstrate renewable energy production, consumption, and battery storage in a smart grid environment. It features interactive controls, real-time data visualization, and detailed reporting. Built in Python, the application uses Tkinter for the graphical interface and Matplotlib for dynamic graphing.
 
-* **Renewable energy sources:** Hydro, solar, and wind power.
-* **Battery storage:**  Charges when there's excess energy and discharges when needed.
-* **Grid connection:**  Used when renewable sources and battery cannot meet demand.
+This document provides comprehensive setup instructions, detailed descriptions of algorithms, and insights into the system's inputs, outputs, and calculations.
 
-The simulation generates data for weather, energy generation, consumption, and battery usage. It includes a GUI built with Tkinter for visualization and interaction.
+Setup Instructions
 
-## Algorithm 
+Prerequisites
+Python Version: Ensure Python 3.8 or higher is installed.
+Download Python
+Required Libraries:
+Tkinter (pre-installed with Python)
+Matplotlib (install via pip)
+Installation
+Clone or download the project repository.
+Navigate to the project directory in your terminal or command prompt.
+Dependencies
+Install the required library using pip:
 
-The core algorithm simulates the energy flow in the city:
+pip install matplotlib
+Running the Program
+Run the main Python file:
 
-1. **Simulate weather:** Generate temperature, wind speed, and solar radiation.
-2. **Simulate energy usage:** Calculate energy demand based on weather.
-3. **Simulate energy generation:**  Calculate power output from each renewable source.
-4. **Manage battery:** Charge or discharge the battery based on net energy (generation - usage).
-5. **Calculate grid usage:** Determine if grid power is needed.
-6. **Update data:** Store the simulation data for analysis and visualization.
+python power_city_simulation.py
+Files Included
+Source Code: power_city_simulation.py
+Documentation: README.md
+Screenshots: Located in the screenshots/ directory.
+Algorithm Design
 
-## Programming Process 
+The application employs modular algorithms for weather simulation, energy production, consumption, and battery management. These algorithms integrate environmental variables and energy equations to compute system dynamics.
 
-1. **Design:** Define the algorithm and plan the GUI layout.
-2. **Code:** Implement the algorithm and GUI using Python and Tkinter.
-3. **Test:** Run the simulation and check for errors.
-4. **Debug:** Use the IDE's debugging tools to identify and fix issues.
-5. **Refine:** Improve the code based on testing and feedback.
+Key Algorithms
+1. Weather Simulation
 
-**Challenges (M1):**
+Purpose: Generate realistic weather data, including temperature, wind speed, and solar radiation.
+Inputs:
+Month: Determines seasonal conditions (e.g., colder temperatures in winter).
+Time of Day: Affects wind speed and solar radiation.
+Outputs:
+Temperature (°C): Seasonal and random variations.
+Wind Speed (m/s): Higher during the day.
+Solar Radiation (W/m²): Available only during daylight hours.
+Calculations:
+Temperature: Randomized values within seasonal ranges.
+Wind Speed: Randomized daily variation.
+Solar Radiation: Generated based on sunlight hours.
+if month in [12, 1, 2]:  # Winter
+    temperature = random.uniform(-5, 10)
+if 6 <= hour <= 18:  # Daytime
+    solar_radiation = random.uniform(0, 1000)
+2. Energy Consumption
 
-* **Realism:**  Balancing simulation accuracy with computational efficiency.
-* **GUI design:** Creating a user-friendly and informative interface.
-* **Data handling:** Efficiently managing and visualizing large datasets.
+Purpose: Simulate household or industrial energy usage.
+Inputs:
+Temperature (°C): Affects heating or cooling demands.
+Random Variation: Adds variability.
+Outputs:
+Energy Usage (kWh): Higher during extreme temperatures.
+Calculations:
+Base Usage: Constant daily consumption baseline.
+Adjustment: Increases for temperatures below 0°C or above 30°C.
+if temperature < 0 or temperature > 30:
+    usage_variation += 200
+energy_usage = base_usage + usage_variation
+3. Renewable Energy Production
 
-## Programming Paradigms
+Each energy source is modeled using specific algorithms:
 
-The code utilizes aspects of:
+Hydroelectric Power:
+Inputs:
+Water flow rate (randomized).
+Efficiency (fixed at 90%).
+Outputs: Power generated in kW.
+Calculations:
+hydro_power = min(water_flow * efficiency * 9.81 * hydro_capacity, hydro_capacity)
+Solar Power:
+Inputs:
+Solar radiation (W/m²).
+Panel efficiency (20%).
+Outputs: Power generated in kW.
+Calculations:
+solar_power = (solar_radiation * efficiency * solar_capacity) / 1000
+Wind Power:
+Inputs:
+Wind speed (m/s).
+Turbine efficiency (40%).
+Outputs: Power generated in kW.
+Calculations:
+wind_power = (wind_speed**3 * efficiency * wind_capacity) / 1000
+4. Battery Management
 
-* **Procedural programming:** Functions like `simulate_weather`, `simulate_energy_usage` demonstrate a procedural approach.
-* **Event-driven programming:** The GUI uses event handlers for button clicks and other user interactions.
-* **Object-oriented programming:**  Potential for refactoring into classes for better organization (e.g., `PowerSource`, `Battery`, `GUI`).
+Purpose: Manage surplus and deficit energy.
+Inputs:
+Net Energy (kWh): Generation minus usage.
+Battery Level (kWh).
+Battery Health (%): Determines charge efficiency.
+Outputs:
+Updated Battery Level.
+Grid Usage: Used when battery is empty.
+Calculations:
+Charge or discharge the battery based on net energy.
+If battery is empty, compute grid energy requirements.
+if net_energy > 0 and battery_level < battery_capacity:
+    battery_level = min(battery_capacity, battery_level + net_energy * (battery_health / 100))
+elif net_energy < 0:
+    grid_usage = abs(net_energy) if battery_level == 0 else 0
+Algorithm Workflow
+Weather Simulation: Generate environmental conditions.
+Energy Usage Calculation: Compute consumption based on conditions.
+Energy Production: Generate power from renewable sources.
+Energy Balancing:
+If production exceeds usage, charge the battery.
+If consumption exceeds production, discharge the battery or use the grid.
+Dynamic Interactions
+User Inputs:
+Enable/disable renewable sources (buttons).
+Adjust energy source capacities (GUI).
+System Outputs:
+Real-time graphs for energy generation and battery level.
+Reports summarizing energy usage, savings, and costs.
+Inputs, Outputs, and Calculations Summary
 
-## IDE and Debugging
+Component	Inputs	Outputs	Key Calculations
+Weather Simulation	Month, time of day	Temperature, wind speed, solar radiation	Seasonal temperature ranges, random variations
+Energy Consumption	Temperature	Energy usage (kWh)	Base usage + seasonal adjustment
+Hydroelectric Power	Water flow, efficiency	Power (kW)	Flow * efficiency * capacity
+Solar Power	Solar radiation, efficiency	Power (kW)	Radiation * efficiency / 1000
+Wind Power	Wind speed, efficiency	Power (kW)	Speed³ * efficiency / 1000
+Battery Management	Net energy, battery level	Battery level, grid usage (kWh)	Charge/discharge battery, calculate grid usage
+Real-Time Visualizations
 
-An IDE (e.g., VS Code, PyCharm) is crucial for efficient development:
+Graphs: Dynamic graphs display hydro, solar, and wind power alongside energy usage and battery status.
+Reports:
+Daily, weekly, monthly, and yearly summaries.
+Breakdown of energy production, grid costs, and total savings.
+Debugging and IDE Usage
 
-* **Code editor:** Syntax highlighting, autocompletion.
-* **Debugger:**  Setting breakpoints, stepping through code, inspecting variables.
-* **Version control integration:**  Managing code changes (e.g., using Git).
-
-**Debugging Process:**
-
-1. Identify errors (runtime errors, logical errors).
-2. Use the debugger to locate the source of the error.
-3. Analyze the code and fix the issue.
-4. Test the code to ensure the error is resolved.
-
-**Debugging for Security:**
-
-* Input validation to prevent malicious or invalid data.
-* Error handling to gracefully handle unexpected situations.
-
-## Coding Standard
-
-A consistent coding standard (e.g., PEP 8) is essential for:
-
-* **Readability:** Makes the code easier to understand and maintain.
-* **Collaboration:**  Ensures code consistency across a team.
-* **Error reduction:**  Helps prevent common coding mistakes.
-
-## Evaluation
-
-* **Algorithm implementation:** The code effectively translates the algorithm into a working simulation.
-* **Paradigm implementation:**  While the current code is mainly procedural, it demonstrates event-driven elements in the GUI. Further refactoring could enhance object-oriented principles.
-* **IDE benefits:**  An IDE significantly improves development efficiency through debugging tools, code analysis, and version control.
-
-## Conclusion
-
-This project provides a practical example of building an application, covering algorithm design, code implementation, debugging, and the use of an IDE. It also touches upon different programming paradigms and the importance of coding standards.
+Breakpoints: Debug variable values in algorithms (e.g., battery health).
+Logs: Inspect runtime errors and ensure robust behavior.
+Real-Time Testing: Validate outputs by visualizing dynamic graphs during simulation.
